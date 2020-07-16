@@ -7,18 +7,16 @@ struct date {
 	int day;
 };
 
-//1월 1일부터 month월 day일까지의 일 수를 세어줍니다. 윤년이면 yun에 1, 아니라면 0을 넣어주세요.
-int dayfromtonewyear(int yun, int month, int day);
 
 //윤년을 판별합니다. return이 1이면 윤년, 0이면 윤년이 아닙니다.
-int yuncheck(int year);
+int yuncheck(struct date d);
 
 //잘못된 month 입력을 검사합니다. return이 1이면 정상, 0이면 오류입니다. 
-int monthcheck(int month);
+int monthcheck(struct date d);
 
 //잘못된 day 입력을 검사합니다. 윤년일 경우 yun에 1, 아닐경우 0을 넣어주세요.
 //return이 1이면 정상, 0이면 오류입니다.
- int daycheck(int yun, int month, int day);
+int daycheck(struct date d);
  
  //date에 after일만큼 더합니다.
  struct date dayafter(struct date, int after);
@@ -31,7 +29,7 @@ struct date dateinput(void);
 int main()
 {
 	struct date d1, d2, d3;
-	d1 = dateinput(void);
+	d1 = dateinput();
 	d2 = dayafter(d1, 7);
 	d3 = dayafter(d1, 21);
 	printf("기준일로부터\n7일 후(8일째 되는 날)는 : %d.%d.%d\n21일 후(22일째 되는 날)는 : %d.%d.%d\n", d2.year, d2.month, d2.day, d3.year, d3.month, d3.day);
@@ -40,41 +38,11 @@ int main()
 }
 
 
-int dayfromtonewyear(int yun, int month, int day)
-{
-	int count = 0, i;
-	
-	for(i = 1;i < month;i++)
-	{
-		if(i == 2 && yun == 1)
-		{
-			count += 29;
-		}
-		else if(i == 2)
-		{
-			count += 29;
-		}
-		else if((i % 2 == 1 && i < 8) || (i >= 8 && i % 2 == 0))
-		{
-			count += 31;
-		}
-		else
-		{
-			count += 30;
-		}
-		
-	}
-	count += day;
-	return count;
-}
-
-
-
-int yuncheck(int year)
+int yuncheck(struct date d)
 {
 
 	int tf;
-	if(year % 4 == 0 && year % 100 != 0 || year % 400 == 0)
+	if(d.year % 4 == 0 && d.year % 100 != 0 || d.year % 400 == 0)
 	{
 		tf = 1;
 	}
@@ -86,10 +54,10 @@ int yuncheck(int year)
 }
 
 
-int monthcheck(int month)
+int monthcheck(struct date d)
 {
 	int mtf = 1;
-	if(month < 1 || month > 12)
+	if(d.month < 1 || d.month > 12)
 	{
 		mtf = 0;
 	}
@@ -97,10 +65,10 @@ int monthcheck(int month)
 }
 
 
- int daycheck(int yun, int month, int day)
+int daycheck(struct date d)
 {
 	int dtf = 1;
-	if(day < 1 || (yun == 1 && month == 2 && day > 29) || (yun == 0 && month == 2 && day > 28) || (((month % 2 == 1 && month < 8) || (month % 2 == 0 && month >= 8)) && (day > 31)) || (((month % 2 == 1 && month >= 8) || (month % 2 == 0 && month < 8)) && (day > 30)))
+	if(d.day < 1 || (d.yun == 1 && d.month == 2 && d.day > 29) || (d.yun == 0 && d.month == 2 && d.day > 28) || (((d.month % 2 == 1 && d.month < 8) || (d.month % 2 == 0 && d.month >= 8)) && (d.day > 31)) || (((d.month % 2 == 1 && d.month >= 8) || (d.month % 2 == 0 && d.month < 8)) && (d.day > 30)))
 	{
 		dtf = 0;
 	}
@@ -141,7 +109,7 @@ int monthcheck(int month)
  		{
  			d.year++;
  			d.month -= 12;
- 			d.yun = yuncheck(d.year);
+ 			d.yun = yuncheck(d);
  		}
  	}
  	return d;
