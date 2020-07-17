@@ -18,7 +18,7 @@ unsigned long long int xorshift128plus(unsigned long long int spt0, unsigned lon
 int main()
 {
 	int num[10] = { 0, };
-	int i, j, n;
+	int i, j, n, aver = 0;
 	unsigned long long int z, y, x;
 	printf("몇 번 돌려볼까요? : ");
 	scanf("%d", &n);
@@ -30,16 +30,16 @@ for(j = 0;j < n;j++)
 	{
 		printf("%d번 돌림...\n", j);
 	}
-	z = xorshift128plus(y, x);
-	y = z;
-	x = z + clock() + j;
-	num[y % 10]++;
+	z = xorshift128plus(x + j, y + j);
+	num[z % 10]++;
 	}
 	
 	printf("\nxor128plus %d번 돌린결과 :\n", n);
 	for(j = 0;j < 10;j++)
 	{
 		printf("%d의 편차 : %d\n", j, (n / 10) -num[j]);
+		aver += abs((n / 10) - num[j]);
 	}
+	printf("\n편차의 평균 : %lg\n", (double)aver / 10);
 	return 0;
 }

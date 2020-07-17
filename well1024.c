@@ -1,4 +1,4 @@
-/* ***************************************************************************** */
+﻿/* ***************************************************************************** */
 /* Copyright:      Francois Panneton and Pierre L'Ecuyer, University of Montreal */
 /*                 Makoto Matsumoto, Hiroshima University                        */
 /* Notice:         This code can be used freely for personal, academic,          */
@@ -50,7 +50,7 @@ int main()
 	union num number;
 	unsigned int *init, *temp;
 	unsigned int i, x[R], n, p, leng, get = 1;
-	unsigned int want;
+	unsigned int want, aver = 0;
 	char * c;
 	init = x;
 	
@@ -67,6 +67,10 @@ int main()
 	free(c);
 	
 	temp = (int *)malloc(sizeof(int) * want);
+	for(i = 0;i < want;i++)
+	{
+		temp[i] = 0;
+	}
 	
 	printf("몇 번 돌려볼까요? : ");
 	scanf("%u", &n);
@@ -75,7 +79,7 @@ int main()
 		x[i] = time(NULL) + clock() + i;
 	}
 	InitWELLRNG1024a(init);
-	printf("%u번 돌립니다...", n);
+	printf("%u번 돌립니다...\n", n);
 	for(i = 0; i < n; i++)
 	{
 		p = 0;
@@ -94,7 +98,9 @@ int main()
 	for(i = 0; i < want; i++)
 	{
 		printf("%d의 평균과의 대략적인 편차 : %d\n", i, (n / want) - temp[i]);
+		aver += abs((n / want) - temp[i]);
 	}
+	printf("\n편차의 평균 : %lg\n", (double)aver / (double)want);
 	free(temp);
 	return 0;
 }
